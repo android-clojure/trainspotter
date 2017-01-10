@@ -8,9 +8,9 @@
 
 (defmacro api-query [& more]
   `(let [response# (client/get (str API_URL ~@more) {:accept :json})
-        status# (:status response#)]
-    (assert (= status# 200) (str "Error:" status#))
-    (json/parse-string (:body response#))))
+         status# (:status response#)]
+     (assert (= status# 200) (str "Error:" status#))
+     (json/parse-string (:body response#))))
 
 (defn get-stations []
   (api-query "metadata/stations"))
