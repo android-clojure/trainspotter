@@ -10,10 +10,18 @@
   `(let [response# (client/get (str API_URL ~@more) {:accept :json})
          status# (:status response#)]
      (assert (= status# 200) (str "Error:" status#))
-     (json/parse-string (:body response#))))
+     (json/parse-string (:body response#) true)))
 
 (defn get-stations []
   (api-query "metadata/stations"))
 
+(defn get-station-names []
+  (map :stationName (get-stations)))
+
 (defn get-train [train-id]
   (api-query "live-trains/" train-id))
+
+(defn get-schedules [from to date]
+  (api-query "schedules?departure_station=" from
+             "&arrival_station=" to
+             "&departure_date=" date))
