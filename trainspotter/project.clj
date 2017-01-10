@@ -50,6 +50,7 @@
 
   :android {;; Specify the path to the Android SDK directory.
             ;; :sdk-path "/home/user/path/to/android-sdk/"
+            :sdk-path "../sdk/android-sdk-linux/"
 
             ;; Increase this value if dexer fails with OutOfMemoryException.
             :dex-opts ["-JXmx4096M" "--incremental"]
