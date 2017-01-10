@@ -6,12 +6,11 @@
 
 (def ^:const TRAIN_ID 8461)
 
-(defn api-query [& more]
-  (let [response (client/get (str API_URL (first more)) {:accept :json})
-        status (:status response)]
-    (assert (= status 200) (str "Error:" status))
-    (json/parse-string (:body response))
-    ))
+(defmacro api-query [& more]
+  `(let [response# (client/get (str API_URL ~@more) {:accept :json})
+        status# (:status response#)]
+    (assert (= status# 200) (str "Error:" status#))
+    (json/parse-string (:body response#))))
 
 (defn get-stations []
   (api-query "metadata/stations"))
