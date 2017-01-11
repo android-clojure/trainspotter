@@ -17,10 +17,11 @@
   "Returns a list of all available stations"
   (api-query "metadata/stations"))
 
-(defn get-train [train-id date-time]
+(defn get-train [train-id ^org.joda.time.DateTime date-time]
   "Returns a train by its id on given date"
-  (api-query "live-trains/" train-id
-             "?departure_date=" date-time))
+  (let [date-str (utils/date-to-str date-time)]
+    (api-query "live-trains/" train-id
+               "?departure_date=" date-str)))
 
 (defn get-schedules [from to ^org.joda.time.DateTime date-time]
   "Returns a list of trains that go from 'from' to 'to' in the given date"
