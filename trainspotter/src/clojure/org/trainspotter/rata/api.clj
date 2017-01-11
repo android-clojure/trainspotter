@@ -18,10 +18,11 @@
   (api-query "metadata/stations"))
 
 (defn get-train [train-id ^org.joda.time.DateTime date-time]
-  "Returns a train by its id on given date"
+  "Returns a train by its id on given date, or nil if no train is found"
   (let [date-str (utils/date-to-str date-time)]
-    (api-query "live-trains/" train-id
-               "?departure_date=" date-str)))
+    (first
+      (api-query "live-trains/" train-id
+                 "?departure_date=" date-str))))
 
 (defn get-schedules [from to ^org.joda.time.DateTime date-time]
   "Returns a list of trains that go from 'from' to 'to' in the given date.
@@ -32,10 +33,11 @@
                "&departure_date=" date-str)))
 
 (defn get-schedule-for-train [from to ^org.joda.time.DateTime date-time]
-  "Returns a train that leaves from 'from' at the given time and goes by 'to'.
-  'from' and 'to' are the short codes of the stations."
+  "Returns a train that leaves from 'from' at the given time and goes by 'to',
+  or nil if no train is found. 'from' and 'to' are the short codes of the stations."
   (let [date-time-str (utils/date-time-to-str date-time)]
-    (api-query "schedules?departure_station=" from
-               "&arrival_station=" to
-               "&from=" date-time-str
-               "&limit=1")))
+    (first
+      (api-query "schedules?departure_station=" from
+                 "&arrival_station=" to
+                 "&from=" date-time-str
+                 "&limit=1"))))
