@@ -1,4 +1,4 @@
-(ns org.trainspotter.rata
+(ns org.trainspotter.rata.api
   (:require [clj-http.lite.client :as client]
             [cheshire.core :as json]
             [org.trainspotter.utils :as utils]))
