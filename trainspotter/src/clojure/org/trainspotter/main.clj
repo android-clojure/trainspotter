@@ -4,7 +4,10 @@
               [neko.notify :refer [toast]]
               [neko.resource :as res]
               [neko.find-view :refer [find-view]]
-              [neko.threading :refer [on-ui]])
+              [neko.threading :refer [on-ui]]
+              [org.trainspotter.rata.api :as api]
+              [org.trainspotter.rata.train :as train]
+              [org.trainspotter.rata.station :as station])
     (:import android.widget.EditText))
 
 ;; We execute this function to import all subclasses of R class. This gives us
@@ -21,6 +24,11 @@
              (res/get-string R$string/input_is_empty)
              (res/get-string R$string/your_input_fmt input))
            :long)))
+
+(defn add-train-to-watch [from to date-time]
+  (let [id-to-add
+        (train/get-id (api/get-schedule-for-train from to date-time))]
+    id-to-add))
 
 ;; This is how an Activity is defined. We create one and specify its onCreate
 ;; method. Inside we create a user interface that consists of an edit and a

@@ -22,7 +22,7 @@
   (api-query "live-trains/" train-id))
 
 (defn get-schedules [from to ^org.joda.time.DateTime date-time]
-  "Returns a list of train that go from 'from' to 'to' in the given date"
+  "Returns a list of trains that go from 'from' to 'to' in the given date"
   (let [date-str (utils/date-to-str date-time)]
     (api-query "schedules?departure_station=" from
                "&arrival_station=" to
