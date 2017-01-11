@@ -4,4 +4,4 @@
   (:trainNumber train))
 
 (defn is-running? [train]
-  (= (:runningCurrently train) "true"))
+  (= (:runningCurrently train) true))
