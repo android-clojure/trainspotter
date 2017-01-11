@@ -14,20 +14,21 @@
      (json/parse-string (:body response#) true)))
 
 (defn get-stations []
+  "Returns a list of all available stations"
   (api-query "metadata/stations"))
 
-(defn get-station-names []
-  (map :stationName (get-stations)))
-
 (defn get-train [train-id]
+  "Returns a train by its id"
   (api-query "live-trains/" train-id))
 
 (defn get-schedules [from to date]
+  "Returns a list of train that go from 'from' to 'to' in the given date"
   (api-query "schedules?departure_station=" from
              "&arrival_station=" to
              "&departure_date=" date))
 
 (defn get-schedule-for-train [from to ^org.joda.time.DateTime date-time]
+  "Returns a train that leaves from 'from' at the given time and goes by 'to'"
   (let [date-time-str (utils/date-time-to-str date-time)]
     (api-query "schedules?departure_station=" from
                "&arrival_station=" to
