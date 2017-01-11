@@ -15,7 +15,8 @@
   :dependencies [[org.clojure-android/clojure "1.7.0-r4"]
                  [neko/neko "4.0.0-alpha5"]
                  [cheshire "5.6.3"]
-                 [clj-http-lite "0.3.0"]]
+                 [clj-http-lite "0.3.0"]
+                 [clj-time "0.11.0"]]
   :profiles {:default [:dev]
 
              :dev
