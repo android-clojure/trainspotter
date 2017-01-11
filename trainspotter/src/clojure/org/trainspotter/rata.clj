@@ -1,6 +1,7 @@
 (ns org.trainspotter.rata
   (:require [clj-http.lite.client :as client]
-            [cheshire.core :as json]))
+            [cheshire.core :as json]
+            [org.trainspotter.utils :as utils]))
 
 (def ^:const API_URL "https://rata.digitraffic.fi/api/v1/")
 
@@ -25,3 +26,10 @@
   (api-query "schedules?departure_station=" from
              "&arrival_station=" to
              "&departure_date=" date))
+
+(defn get-schedule-for-train [from to ^org.joda.time.DateTime date-time]
+  (let [date-time-str (utils/date-time-to-str date-time)]
+    (api-query "schedules?departure_station=" from
+               "&arrival_station=" to
+               "&from=" date-time-str
+               "&limit=1")))
