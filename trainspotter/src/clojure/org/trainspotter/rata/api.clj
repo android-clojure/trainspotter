@@ -1,7 +1,8 @@
 (ns org.trainspotter.rata.api
   (:require [clj-http.lite.client :as client]
             [cheshire.core :as json]
-            [org.trainspotter.utils :as utils]))
+            [org.trainspotter.utils :as utils]
+            [clj-time.core :as t]))
 
 (def ^:const API_URL "https://rata.digitraffic.fi/api/v1/")
 
@@ -35,9 +36,11 @@
 (defn get-schedule-for-train [from to ^org.joda.time.DateTime date-time]
   "Returns a train that leaves from 'from' at the given time and goes by 'to',
   or nil if no train is found. 'from' and 'to' are the short codes of the stations."
-  (let [date-time-str (utils/date-time-to-str date-time)]
+  (let [from-date-time-str (utils/date-time-to-str date-time)
+        to-date-time-str (utils/date-time-to-str (t/plus date-time (t/millis 1)))]
     (first
       (api-query "schedules?departure_station=" from
                  "&arrival_station=" to
-                 "&from=" date-time-str
+                 "&from=" from-date-time-str
+                 "&to=" to-date-time-str
                  "&limit=1"))))

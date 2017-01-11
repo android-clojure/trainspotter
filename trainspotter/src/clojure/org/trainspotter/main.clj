@@ -7,7 +7,8 @@
               [neko.threading :refer [on-ui]]
               [org.trainspotter.rata.api :as api]
               [org.trainspotter.rata.train :as train]
-              [org.trainspotter.rata.station :as station])
+              [org.trainspotter.rata.station :as station]
+              [clj-time.core :as t])
     (:import android.widget.EditText))
 
 ;; We execute this function to import all subclasses of R class. This gives us
@@ -25,7 +26,7 @@
              (res/get-string R$string/your_input_fmt input))
            :long)))
 
-(defn add-train-to-watch [from to date-time]
+(defn add-train-to-watch [from to ^org.joda.time.DateTime date-time]
   (let [id-to-add
         (train/get-id (api/get-schedule-for-train from to date-time))]
     id-to-add))
