@@ -16,6 +16,7 @@
                  [neko/neko "4.0.0-alpha5"]
                  [cheshire "5.6.3"]
                  [clj-http-lite "0.3.0"]
+                 [org.clojure/java.jdbc "0.4.2"]
                  [clj-time "0.11.0"]]
   :profiles {:default [:dev]
 
