@@ -11,7 +11,7 @@
 (defmacro api-query [& more]
   `(let [response# (client/get (str API_URL ~@more) {:accept :json})
          status# (:status response#)]
-     (assert (= status# 200) (str "Error:" status#))
+     (assert (= status# 200) (str "Error: " status#))
      (json/parse-string (:body response#) true)))
 
 (defn get-stations []
@@ -37,10 +37,11 @@
   "Returns a train that leaves from 'from' at the given time and goes by 'to',
   or nil if no train is found. 'from' and 'to' are the short codes of the stations."
   (let [from-date-time-str (utils/date-time-to-str date-time)
-        to-date-time-str (utils/date-time-to-str (t/plus date-time (t/millis 1)))]
-    (first
-      (api-query "schedules?departure_station=" from
-                 "&arrival_station=" to
-                 "&from=" from-date-time-str
-                 "&to=" to-date-time-str
-                 "&limit=1"))))
+        to-date-time-str (utils/date-time-to-str (t/plus date-time (t/millis 1)))
+        response (api-query "schedules?departure_station=" from
+                            "&arrival_station=" to
+                            "&from=" from-date-time-str
+                            "&to=" to-date-time-str
+                            "&limit=1")]
+    (assert (list? response) (str "Error: " (:code response)))
+    response))
