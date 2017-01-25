@@ -18,8 +18,9 @@
 
 (defn add-train-to-watch [from to ^org.joda.time.DateTime date-time]
   (let [id-to-add
-        (train/get-id (api/get-schedule-for-train from to date-time))]
-    id-to-add))
+        (future (train/get-id (api/get-schedule-for-train from to date-time)))]
+    (on-ui (toast (str "train to add: "@id-to-add)))
+    @id-to-add))
 
 (defn find-train [activity]
   (let [^EditText from (.getText (find-view activity ::from))
