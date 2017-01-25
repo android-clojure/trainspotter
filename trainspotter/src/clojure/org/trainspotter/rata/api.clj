@@ -43,5 +43,5 @@
                             "&from=" from-date-time-str
                             "&to=" to-date-time-str
                             "&limit=1")]
-    (assert (list? response) (str "Error: " (:code response)))
-    response))
+    (assert (seq? response) (str "Error: " (:code response)))
+    (first response)))

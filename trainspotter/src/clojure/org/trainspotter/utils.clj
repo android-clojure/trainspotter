@@ -10,3 +10,6 @@
 
 (defn date-to-str [^org.joda.time.DateTime date-time]
   (f/unparse date-utc-formatter date-time))
+
+(defn str-to-date-time [date-str]
+  (f/parse date-time-utc-formatter date-str))
