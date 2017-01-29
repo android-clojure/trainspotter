@@ -32,7 +32,14 @@
      (db/query-seq
        (trainspotter-db)
        :trains
-       (str "train_id = " train-id))))
+       {:train_id train-id})))
+
+(defn get-train-ids []
+  (db/query-seq
+    (trainspotter-db)
+    [:train_id]
+    :trains
+    nil))
 
 (defn add-train [train-id]
   (log/i "adding train to database:" train-id)
