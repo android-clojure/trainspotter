@@ -33,9 +33,12 @@
             :train_id train-id
             :station station}))))
 
-(deftest get-train-ids
-  (let [train-ids [1 2 3 4 5]]
-    (doseq [train-id train-ids]
-      (trainspotter/add-train train-id "LPV"))
-    (is (= (trainspotter/get-train-ids)
-           train-ids))))
+(deftest get-trains
+  (let [trains {1 "LPV" 2 "KPO" 3 "JRS" 4 "HKI"}]
+    (doseq [train trains]
+      (trainspotter/add-train (first train) (second train)))
+    (is (= (trainspotter/get-trains)
+           '({:train_id 1 :station "LPV"}
+             {:train_id 2 :station "KPO"}
+             {:train_id 3 :station "JRS"}
+             {:train_id 4 :station "HKI"})))))

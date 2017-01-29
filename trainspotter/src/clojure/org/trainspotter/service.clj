@@ -3,7 +3,10 @@
     [org.trainspotter.log :as log]
     [org.trainspotter.broadcastreceiver :as tick]
     [org.trainspotter.rata.api :as api]
+    [org.trainspotter.rata.train :as train]
     [org.trainspotter.database :as db]
+    [neko.threading :refer [on-ui]]
+    [neko.notify :refer [toast]]
     [clj-time.core :as t])
   (:import [android.app Service]
            [android.os Handler HandlerThread])
@@ -38,9 +41,13 @@
 
 (defn tick-func []
   (log/d "service tick thread id " (Thread/currentThread))
-  (doseq [train-id (db/get-train-ids)]
-    (log/d
-      (api/get-train train-id (t/date-time 2017 01 30)))))
+  (doseq [train-entry (db/get-trains)]
+    (let [train (api/get-train (:train_id train-entry) (t/now))]
+      (log/d train)
+      (if (train/cancelled? train (:station train-entry))
+        (log/i "train" train-entry "cancelled")
+        (on-ui (toast (str "train " train-entry " cancelled")))
+      ))))
 
 (defn service-onStartCommand [^org.trainspotter.service this intent flags start-id]
   (let [state (.state this)

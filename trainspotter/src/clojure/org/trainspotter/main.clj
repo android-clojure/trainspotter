@@ -12,8 +12,7 @@
               [org.trainspotter.database :as db]
               [org.trainspotter.log :as log]
               [clj-time.core :as t])
-    (:import android.widget.EditText
-             android.app.Activity
+    (:import android.app.Activity
              android.content.Intent
              ))
 
@@ -25,13 +24,13 @@
   (let [id-to-add
         (future (train/get-id (api/get-schedule-for-train from to date-time)))]
     (on-ui (toast (str "train to add: " @id-to-add)))
-    (db/add-train @id-to-add)))
+    (db/add-train @id-to-add from)))
 
 (defn find-train [activity]
-  (let [^EditText from (.getText (find-view activity ::from))
-        ^EditText to (.getText (find-view activity ::to))
-        ^EditText date (.getText (find-view activity ::date))
-        ^EditText dep-time (.getText (find-view activity ::time))]
+  (let [from (str (.getText (find-view activity ::from)))
+        to (str (.getText (find-view activity ::to)))
+        date (str (.getText (find-view activity ::date)))
+        dep-time (str (.getText (find-view activity ::time)))]
     (add-train-to-watch
       from
       to
@@ -71,7 +70,9 @@
       (.superOnCreate this bundle)
       (neko.debug/keep-screen-on this)
       (on-ui
-        (set-content-view! this (main-layout this)))))
+        (set-content-view! this (main-layout this)))
+      (.startService this service)
+      ))
   (onStart
     [this]
     (.superOnStart this)
@@ -85,6 +86,20 @@
       (on-ui (.setText (find-view (*a) ::time) "05:17:00")))
     (.superOnResume this)
     )
+  (onPause
+    [this]
+    (.superOnPause this)
+    )
+  (onStop
+    [this]
+    (.superOnStop this)
+    )
+  (onDestroy
+    [this]
+    (let [service (Intent. this org.trainspotter.service)]
+      (.superOnDestroy this)
+      (.stopService this service)
+      ))
 )
 
 ; (.startService (*a) (Intent. (*a) org.trainspotter.service))
