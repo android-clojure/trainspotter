@@ -14,6 +14,7 @@
               [clj-time.core :as t])
     (:import android.widget.EditText
              android.app.Activity
+             android.content.Intent
              ))
 
 ;; We execute this function to import all subclasses of R class. This gives us
@@ -85,3 +86,6 @@
     (.superOnResume this)
     )
 )
+
+; (.startService (*a) (Intent. (*a) org.trainspotter.service))
+; (.stopService (*a) (Intent. (*a) org.trainspotter.service))
