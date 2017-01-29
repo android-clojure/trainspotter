@@ -11,7 +11,8 @@
     :tables {:trains
              {:columns
               {:_id "integer primary key"
-               :train_id "integer not null unique"}}}))
+               :train_id "integer not null unique"
+               :station "text not null"}}}))
 
 (def get-db-helper
   (memoize
@@ -43,9 +44,12 @@
       :trains
       nil)))
 
-(defn add-train [train-id]
-  (log/i "adding train to database:" train-id)
-  (let [return (db/insert (trainspotter-db) :trains {:train_id train-id})]
+(defn add-train [train-id station]
+  (log/i "adding train to database:" train-id station)
+  (let [return (db/insert
+                 (trainspotter-db)
+                 :trains {:train_id train-id
+                          :station station})]
     (assert (not= -1 return) "db insert failed")
     (log/w "train added with db id:" return)
     return))

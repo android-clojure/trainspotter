@@ -17,21 +17,25 @@
 (use-fixtures :each db-fixture)
 
 (deftest add-train
-  (let [train-id 2468]
-    (trainspotter/add-train train-id)
+  (let [train-id 2468
+        station "LPV"]
+    (trainspotter/add-train train-id station)
     (is (= (db/query-seq (trainspotter/trainspotter-db) :trains {:_id 1})
            (list {:_id 1
-                  :train_id train-id})))))
+                  :train_id train-id
+                  :station station})))))
 (deftest get-train
-  (let [train-id 2468]
-    (trainspotter/add-train train-id)
+  (let [train-id 2468
+        station "LPV"]
+    (trainspotter/add-train train-id station)
     (is (= (trainspotter/get-train train-id)
            {:_id 1
-            :train_id train-id}))))
+            :train_id train-id
+            :station station}))))
 
 (deftest get-train-ids
   (let [train-ids [1 2 3 4 5]]
-    (doseq [x train-ids]
-      (trainspotter/add-train x))
+    (doseq [train-id train-ids]
+      (trainspotter/add-train train-id "LPV"))
     (is (= (trainspotter/get-train-ids)
            train-ids))))
