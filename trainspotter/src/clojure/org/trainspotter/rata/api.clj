@@ -13,8 +13,8 @@
   `(let [query# (str API_URL ~@more)
          response# (client/get query# {:accept :json})
          status# (:status response#)]
-     (log/i "query: " query#)
-     (log/d "response " response#)
+     (log/i "query:" query#)
+     (log/d "response" response#)
      (assert (= status# 200) (str "Error: " status#))
      (json/parse-string (:body response#) true)))
 
