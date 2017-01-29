@@ -20,18 +20,26 @@
                  [clj-time "0.11.0"]]
   :profiles {:default [:dev]
 
+             :repl
+             [{:dependencies [[org.clojure/tools.nrepl "0.2.10"]]}]
+
+             :local-testing
+             [:repl
+              {:android {:aot :all-with-unused}
+               :target-path "target/local-testing"
+               :dependencies [[org.robolectric/robolectric "3.0"]
+                              [org.clojure-android/droid-test "0.1.1-SNAPSHOT"]]}]
+
              :dev
-             [:android-common :android-user
-              {:dependencies [[org.clojure/tools.nrepl "0.2.10"]]
-               :target-path "target/debug"
+             [:repl
+              {:target-path "target/debug"
                :android {:aot :all-with-unused
                          :manifest-options {:app-name "TrainSpotter (debug)"}
                          ;; Uncomment to be able install debug and release side-by-side.
                          ;; :rename-manifest-package "org.trainspotter.debug"
                          }}]
              :release
-             [:android-common
-              {:target-path "target/release"
+             [{:target-path "target/release"
                :android
                {;; :keystore-path "/home/user/.android/private.keystore"
                 ;; :key-alias "mykeyalias"
