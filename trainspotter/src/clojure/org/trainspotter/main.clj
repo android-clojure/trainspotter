@@ -12,7 +12,9 @@
               [org.trainspotter.database :as db]
               [org.trainspotter.log :as log]
               [clj-time.core :as t])
-    (:import android.widget.EditText))
+    (:import android.widget.EditText
+             android.app.Activity
+             ))
 
 ;; We execute this function to import all subclasses of R class. This gives us
 ;; access to all application resources.
@@ -34,37 +36,41 @@
       to
       (utils/str-to-date-time (str date "T" dep-time ".000Z")))))
 
+(defn main-layout [^Activity ctx]
+  [:linear-layout {:orientation :vertical
+                   :layout-width :fill
+                   :layout-height :wrap}
+   [:linear-layout {:orientation :horizontal
+                    :layout-width :fill
+                    :layout-height :wrap}
+    [:edit-text {:id ::from
+                 :hint "LPV"
+                 :layout-width :wrap}]
+    [:edit-text {:id ::to
+                 :hint "JRS"
+                 :layout-width :wrap}]
+    [:edit-text {:id ::date
+                 :hint "2017-01-09"
+                 :layout-width :wrap}]
+    [:edit-text {:id ::time
+                 :hint "05:17:00"
+                 :layout-width :wrap}]
+    [:button {:text "find train"
+              :on-click (fn [_] (find-train ctx))}]]])
+
 ;; This is how an Activity is defined. We create one and specify its onCreate
 ;; method. Inside we create a user interface that consists of an edit and a
 ;; button. We also give set callback to the button.
 (defactivity org.trainspotter.MainActivity
   :key :main
 
-  (onCreate [this bundle]
-    (.superOnCreate this bundle)
-    (neko.debug/keep-screen-on this)
-    (on-ui
-      (set-content-view! (*a)
-        [:linear-layout {:orientation :vertical
-                         :layout-width :fill
-                         :layout-height :wrap}
-         [:linear-layout {:orientation :horizontal
-                          :layout-width :fill
-                          :layout-height :wrap}
-          [:edit-text {:id ::from
-                       :hint "LPV"
-                       :layout-width :wrap}]
-          [:edit-text {:id ::to
-                       :hint "JRS"
-                       :layout-width :wrap}]
-          [:edit-text {:id ::date
-                       :hint "2017-01-09"
-                       :layout-width :wrap}]
-          [:edit-text {:id ::time
-                       :hint "05:17:00"
-                       :layout-width :wrap}]
-         [:button {:text "find train"
-                   :on-click (fn [_] (find-train (*a)))}]]])))
+  (onCreate
+    [this bundle]
+    (let [service (Intent. this org.trainspotter.service)]
+      (.superOnCreate this bundle)
+      (neko.debug/keep-screen-on this)
+      (on-ui
+        (set-content-view! this (main-layout this)))))
   (onStart
     [this]
     (.superOnStart this)
