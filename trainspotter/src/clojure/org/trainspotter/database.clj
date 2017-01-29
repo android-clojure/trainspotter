@@ -27,5 +27,8 @@
   (:_id entry-seq))
 
 (defn add-train [train-id]
-  (log/d "add train to watch:" train-id)
-  (db/insert (trainspotter-db) :trains {:train_id train-id}))
+  (log/i "adding train to database:" train-id)
+  (let [return (db/insert (trainspotter-db) :trains {:train_id train-id})]
+    (assert (not= -1 return) "db insert failed")
+    (log/w "train added with db id:" return))
+  return)

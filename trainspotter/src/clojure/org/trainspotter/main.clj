@@ -9,6 +9,8 @@
               [org.trainspotter.rata.train :as train]
               [org.trainspotter.rata.station :as station]
               [org.trainspotter.utils :as utils]
+              [org.trainspotter.database :as db]
+              [org.trainspotter.log :as log]
               [clj-time.core :as t])
     (:import android.widget.EditText))
 
@@ -19,8 +21,8 @@
 (defn add-train-to-watch [from to ^org.joda.time.DateTime date-time]
   (let [id-to-add
         (future (train/get-id (api/get-schedule-for-train from to date-time)))]
-    (on-ui (toast (str "train to add: "@id-to-add)))
-    @id-to-add))
+    (on-ui (toast (str "train to add: " @id-to-add)))
+    (db/add-train @id-to-add)))
 
 (defn find-train [activity]
   (let [^EditText from (.getText (find-view activity ::from))
@@ -63,3 +65,9 @@
                        :layout-width :wrap}]
          [:button {:text "find train"
                    :on-click (fn [_] (find-train (*a)))}]]]))))
+
+(do
+  (on-ui (.setText (find-view (*a) ::from) "LPV"))
+  (on-ui (.setText (find-view (*a) ::to) "JRS"))
+  (on-ui (.setText (find-view (*a) ::date) "2017-01-09"))
+  (on-ui (.setText (find-view (*a) ::time) "05:17:00")))
