@@ -28,3 +28,10 @@
     (is (= (trainspotter/get-train train-id)
            {:_id 1
             :train_id train-id}))))
+
+(deftest get-train-ids
+  (let [train-ids [1 2 3 4 5]]
+    (doseq [x train-ids]
+      (trainspotter/add-train x))
+    (is (= (trainspotter/get-train-ids)
+           train-ids))))

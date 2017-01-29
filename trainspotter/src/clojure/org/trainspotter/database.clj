@@ -35,11 +35,13 @@
        {:train_id train-id})))
 
 (defn get-train-ids []
-  (db/query-seq
-    (trainspotter-db)
-    [:train_id]
-    :trains
-    nil))
+  (map
+    :train_id
+    (db/query-seq
+      (trainspotter-db)
+      [:train_id]
+      :trains
+      nil)))
 
 (defn add-train [train-id]
   (log/i "adding train to database:" train-id)
