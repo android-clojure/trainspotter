@@ -2,7 +2,9 @@
   (:require
     [org.trainspotter.log :as log]
     [org.trainspotter.broadcastreceiver :as tick]
-    [org.trainspotter.database :as db])
+    [org.trainspotter.rata.api :as api]
+    [org.trainspotter.database :as db]
+    [clj-time.core :as t])
   (:import [android.app Service]
            [android.os Handler HandlerThread])
   (:gen-class
@@ -35,7 +37,10 @@
     (log/i "Service created")))
 
 (defn tick-func []
-  (log/d "service tick thread id " (Thread/currentThread)))
+  (log/d "service tick thread id " (Thread/currentThread))
+  (doseq [train-id (db/get-train-ids)]
+    (log/d
+      (api/get-train train-id (t/date-time 2017 01 30)))))
 
 (defn service-onStartCommand [^org.trainspotter.service this intent flags start-id]
   (let [state (.state this)
