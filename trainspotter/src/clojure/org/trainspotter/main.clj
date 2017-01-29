@@ -64,10 +64,18 @@
                        :hint "05:17:00"
                        :layout-width :wrap}]
          [:button {:text "find train"
-                   :on-click (fn [_] (find-train (*a)))}]]]))))
-
-(do
-  (on-ui (.setText (find-view (*a) ::from) "LPV"))
-  (on-ui (.setText (find-view (*a) ::to) "JRS"))
-  (on-ui (.setText (find-view (*a) ::date) "2017-01-09"))
-  (on-ui (.setText (find-view (*a) ::time) "05:17:00")))
+                   :on-click (fn [_] (find-train (*a)))}]]])))
+  (onStart
+    [this]
+    (.superOnStart this)
+    )
+  (onResume
+    [this]
+    (do
+      (on-ui (.setText (find-view (*a) ::from) "LPV"))
+      (on-ui (.setText (find-view (*a) ::to) "JRS"))
+      (on-ui (.setText (find-view (*a) ::date) "2017-01-09"))
+      (on-ui (.setText (find-view (*a) ::time) "05:17:00")))
+    (.superOnResume this)
+    )
+)
