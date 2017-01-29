@@ -2,6 +2,7 @@
   (:require [clj-http.lite.client :as client]
             [cheshire.core :as json]
             [org.trainspotter.utils :as utils]
+            [org.trainspotter.log :as log]
             [clj-time.core :as t]))
 
 (def ^:const API_URL "https://rata.digitraffic.fi/api/v1/")
@@ -9,8 +10,11 @@
 (def ^:const TRAIN_ID 8461)
 
 (defmacro api-query [& more]
-  `(let [response# (client/get (str API_URL ~@more) {:accept :json})
+  `(let [query# (str API_URL ~@more)
+         response# (client/get query# {:accept :json})
          status# (:status response#)]
+     (log/i "query: " query#)
+     (log/d "response " response#)
      (assert (= status# 200) (str "Error: " status#))
      (json/parse-string (:body response#) true)))
 
