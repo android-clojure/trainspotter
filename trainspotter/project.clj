@@ -34,7 +34,7 @@
              [:repl
               {:target-path "target/debug"
                :android {:aot :all-with-unused
-                         :aot-exclude-ns [#"org\.trainspotter\.t-.+"]
+                         :aot-exclude-ns [#"org\.trainspotter\..*t-.+"]
                          :manifest-options {:app-name "TrainSpotter (debug)"}
                          ;; Uncomment to be able install debug and release side-by-side.
                          ;; :rename-manifest-package "org.trainspotter.debug"
