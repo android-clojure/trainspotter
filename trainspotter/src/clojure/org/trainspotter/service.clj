@@ -44,7 +44,7 @@
   (doseq [train-entry (db/get-trains)]
     (let [train (api/get-train (:train_id train-entry) (t/now))]
       (log/d train)
-      (if (train/cancelled? train (:station train-entry))
+      (when (train/cancelled? train (:station train-entry))
         (log/i "train" train-entry "cancelled")
         (on-ui (toast (str "train " train-entry " cancelled")))
       ))))
