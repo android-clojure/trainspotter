@@ -42,11 +42,11 @@
   or nil if no train is found. 'from' and 'to' are the short codes of the stations."
   (let [from-date-time-str (utils/date-time-to-str date-time)
         to-date-time-str (utils/date-time-to-str
-                           (t/plus
-                             date-time
-                             (t/minus
-                               (t/minutes 1)
-                               (t/millis 1))))
+                           (t/minus
+                             (t/plus
+                               date-time
+                               (t/minutes 1))
+                             (t/millis 1)))
         response (api-query "schedules?departure_station=" from
                             "&arrival_station=" to
                             "&from=" from-date-time-str
