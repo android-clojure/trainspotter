@@ -10,7 +10,7 @@
   (filter #(= (:stationShortCode %) station) time-table))
 
 (defn get-cancelled-stops [stops]
-  (not (empty? (filter #(:cancelled %) stops))))
+  (seq (filter :cancelled stops)))
 
 (defn cancelled? [train station]
   (or (:cancelled train) ;; <- TODO is this needed?
