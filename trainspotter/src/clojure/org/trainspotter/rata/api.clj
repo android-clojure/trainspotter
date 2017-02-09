@@ -41,11 +41,15 @@
   "Returns a train that leaves from 'from' at the given time and goes by 'to',
   or nil if no train is found. 'from' and 'to' are the short codes of the stations."
   (let [from-date-time-str (utils/date-time-to-str date-time)
-        to-date-time-str (utils/date-time-to-str (t/plus date-time (t/millis 1)))
+        to-date-time-str (utils/date-time-to-str
+                           (t/plus
+                             date-time
+                             (t/minus
+                               (t/minutes 1)
+                               (t/millis 1))))
         response (api-query "schedules?departure_station=" from
                             "&arrival_station=" to
                             "&from=" from-date-time-str
-                            "&to=" to-date-time-str
-                            "&limit=1")]
+                            "&to=" to-date-time-str)]
     (assert (seq? response) (str "Error: " (:code response)))
     (first response)))

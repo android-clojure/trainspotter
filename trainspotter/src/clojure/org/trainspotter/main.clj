@@ -34,7 +34,7 @@
     (add-train-to-watch
       from
       to
-      (utils/str-to-date-time (str date "T" dep-time ".000Z")))))
+      (utils/str-to-date-time (str date "T" dep-time ":00.000Z")))))
 
 (defn main-layout [^Activity ctx]
   [:linear-layout {:orientation :vertical
@@ -53,7 +53,7 @@
                  :hint "2017-01-09"
                  :layout-width :wrap}]
     [:edit-text {:id ::time
-                 :hint "05:17:00"
+                 :hint "05:17"
                  :layout-width :wrap}]
     [:button {:text "find train"
               :on-click (fn [_] (find-train ctx))}]]])
@@ -83,7 +83,7 @@
       (on-ui (.setText (find-view (*a) ::from) "LPV"))
       (on-ui (.setText (find-view (*a) ::to) "JRS"))
       (on-ui (.setText (find-view (*a) ::date) "2017-01-09"))
-      (on-ui (.setText (find-view (*a) ::time) "05:17:00")))
+      (on-ui (.setText (find-view (*a) ::time) "05:17")))
     (.superOnResume this)
     )
   (onPause
