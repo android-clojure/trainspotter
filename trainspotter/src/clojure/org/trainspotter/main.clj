@@ -21,10 +21,11 @@
 (res/import-all)
 
 (defn add-train-to-watch [from to ^org.joda.time.DateTime date-time]
-  (let [id-to-add
-        (future (train/get-id (api/get-schedule-for-train from to date-time)))]
-    (on-ui (toast (str "train to add: " @id-to-add)))
-    (db/add-train @id-to-add from)))
+  (let [train-to-add (future (api/get-schedule-for-train from to date-time))
+        train-id (train/get-id @train-to-add)
+        train-name(train/get-name @train-to-add) ]
+    (on-ui (toast (str "train to add: " train-id)))
+    (db/add-train train-id from train-name (utils/date-time-to-hhmm date-time))))
 
 (defn find-train [activity]
   (let [from (str (.getText (find-view activity ::from)))
@@ -36,8 +37,42 @@
       to
       (utils/str-to-date-time (str date "T" dep-time ":00.000Z")))))
 
+(defn make-keyword [& more]
+  {:pre [(not (nil? more))]}
+  (keyword
+    (str *ns*)
+    (clojure.string/join "-" more)))
+
+;; this is train from the database, not from the api
+(defn train-view [^Activity ctx train-data]
+  (let [train-id (:train_id train-data)
+        station (:station train-data)
+        train-name (:name train-data)
+        departure-time (:time train-data)]
+    [:linear-layout {:orientation :horizontal
+                     :layout-width :fill
+                     :layout-height :wrap}
+     [:text-view {:id (make-keyword train-id "station")
+                  :text (str station)
+                  :layout-width [0 :dp]
+                  :layout-weight 1
+                  }]
+     [:text-view {:id (make-keyword train-id "name")
+                  :text (str train-name)
+                  :layout-width [0 :dp]
+                  :layout-weight 1
+                  }]
+     [:text-view {:id (make-keyword train-id "time")
+                  :text (str departure-time)
+                  :layout-width [0 :dp]
+                  :layout-weight 1
+                  }]
+     ]
+    )
+  )
+
 (defn main-layout [^Activity ctx]
-  [:linear-layout {:orientation :vertical
+  `[:linear-layout {:orientation :vertical
                    :layout-width :fill
                    :layout-height :wrap}
    [:linear-layout {:orientation :horizontal
@@ -56,7 +91,9 @@
                  :hint "05:17"
                  :layout-width :wrap}]
     [:button {:text "find train"
-              :on-click (fn [_] (find-train ctx))}]]])
+              :on-click (fn [_] (find-train ctx))}]]
+   ~@(map #(train-view (*a) %) (db/get-trains))
+   ])
 
 ;; This is how an Activity is defined. We create one and specify its onCreate
 ;; method. Inside we create a user interface that consists of an edit and a

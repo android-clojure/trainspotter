@@ -3,6 +3,9 @@
 (defn get-id [train]
   (:trainNumber train))
 
+(defn get-name [train]
+  (:commuterLineID train))
+
 (defn running? [train]
   (= (:runningCurrently train) true))
 
@@ -14,4 +17,4 @@
 
 (defn cancelled? [train station]
   (or (:cancelled train) ;; <- TODO is this needed?
-       (get-cancelled-stops (get-stops (:timeTableRows train) station))))
+       (not (empty? (get-cancelled-stops (get-stops (:timeTableRows train) station))))))
