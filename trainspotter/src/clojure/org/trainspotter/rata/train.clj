@@ -38,7 +38,7 @@
   (seq (filter :cancelled stops)))
 
 ; (defn late? [train station]
-;   (< 0 (:differenceInMinutes
+;   (pos? (:differenceInMinutes
 ;          (get-stop
 ;            train
 ;            station
@@ -51,7 +51,7 @@
                       station
                       :departure)
                     [:differenceInMinutes :causes])]
-    (assoc late-info :late (< 0 (:differenceInMinutes late-info)))))
+    (assoc late-info :late (pos? (:differenceInMinutes late-info)))))
 
 (defn cancelled? [train station]
   (or (:cancelled train) ;; <- TODO is this needed?
