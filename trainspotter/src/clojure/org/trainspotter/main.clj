@@ -23,7 +23,7 @@
 (defn add-train-to-watch [from to ^org.joda.time.DateTime date-time]
   (let [train-to-add (future (api/get-schedule-for-train from to date-time))
         train-id (train/get-id @train-to-add)
-        train-name(train/get-name @train-to-add) ]
+        train-name(train/get-name @train-to-add)]
     (on-ui (toast (str "train to add: " train-id)))
     (db/add-train train-id from train-name (utils/date-time-to-hhmm date-time))))
 
@@ -52,17 +52,17 @@
     [:linear-layout {:orientation :horizontal
                      :layout-width :fill
                      :layout-height :wrap}
-     [:text-view {:id (make-keyword train-id "station")
+     [:text-view {:id (make-keyword "station" train-id)
                   :text (str station)
                   :layout-width [0 :dp]
                   :layout-weight 1
                   }]
-     [:text-view {:id (make-keyword train-id "name")
+     [:text-view {:id (make-keyword "name" train-id)
                   :text (str train-name)
                   :layout-width [0 :dp]
                   :layout-weight 1
                   }]
-     [:text-view {:id (make-keyword train-id "time")
+     [:text-view {:id (make-keyword "time" train-id)
                   :text (str departure-time)
                   :layout-width [0 :dp]
                   :layout-weight 1
@@ -117,10 +117,10 @@
   (onResume
     [this]
     (do
-      (on-ui (.setText (find-view (*a) ::from) "LPV"))
-      (on-ui (.setText (find-view (*a) ::to) "JRS"))
-      (on-ui (.setText (find-view (*a) ::date) "2017-01-09"))
-      (on-ui (.setText (find-view (*a) ::time) "05:17")))
+      (on-ui (.setText (find-view this ::from) "LPV"))
+      (on-ui (.setText (find-view this ::to) "JRS"))
+      (on-ui (.setText (find-view this ::date) "2017-01-09"))
+      (on-ui (.setText (find-view this ::time) "05:17")))
     (.superOnResume this)
     )
   (onPause
