@@ -91,7 +91,7 @@
                  :hint "05:17"
                  :layout-width :wrap}]
     [:button {:text "find train"
-              :on-click (fn [_] (find-train ctx))}]]
+              :on-click ~(fn [_] (find-train ctx))}]]
    ~@(map #(train-view (*a) %) (db/get-trains))
    ])
 
